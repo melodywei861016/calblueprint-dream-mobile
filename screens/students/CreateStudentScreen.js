@@ -11,7 +11,6 @@ import { standardError } from '../../lib/alerts';
 class CreateStudentScreen extends React.Component {
   constructor(props) {
     super(props);
-    this._onSuccess = this._onSuccess.bind(this);
     this._handleCreateStudent = this._handleCreateStudent.bind(this);
     this._handleUpdateStudent = this._handleUpdateStudent.bind(this);
     this.state = {
@@ -21,38 +20,42 @@ class CreateStudentScreen extends React.Component {
     }
   }
 
-  _handleCreateStudent(params) {
-    params.course_id = this.state.courseId;
-    params.teacher_id = this.state.teacherId;
+  // _handleCreateStudent(params) {
+  //   params.course_id = this.state.courseId;
+  //   params.teacher_id = this.state.teacherId;
+  //
+  //   const successFunc = (responseData) => {
+  //     this.setState({ student: responseData});
+  //     this.props.navigation.state.params.refreshStudents();
+  //     this.props.navigation.goBack(null);
+  //   }
+  //   const errorFunc = (error) => {
+  //     console.error(error);
+  //   }
+  //   postRequest(APIRoutes.getStudentsPath(this.state.courseId), successFunc, errorFunc, params);
+  // }
 
+  _handleCreateStudent(params) {
+      const successFunc = (responseData) => {
+        this.setState({ student: responseData});
+        this.props.navigation.state.params.refreshStudents();
+        this.props.navigation.goBack(null);
+      }
+    postRequest(APIRoutes.getStudentsPath(this.state.courseId), successFunc, standardError, params=params);
+  }
+
+  _handleUpdateStudent(params) {
     const successFunc = (responseData) => {
       this.setState({ student: responseData});
       this.props.navigation.state.params.refreshStudents();
       this.props.navigation.goBack(null);
     }
-    const errorFunc = (error) => {
-      console.error(error);
-    }
-    postRequest(APIRoutes.getStudentsPath(this.state.courseId), successFunc, errorFunc, params);
-  }
-
-  _onSuccess(response) {
-    this.props.navigation.state.params.refreshStudents();
-    this.props.navigation.goBack(null);
-  }
-
-  _handleCreateStudent(params) {
-    postRequest(APIRoutes.getStudentsPath(this.state.courseId), this._onSuccess, standardError, params=params);
-  }
-
-  _handleUpdateStudent(params) {
-    putRequest(APIRoutes.getStudentPath(this.state.student.id), this._onSuccess, standardError, params=params);
+    putRequest(APIRoutes.getStudentPath(this.state.student.id), successFunc, standardError, params=params);
   }
 
   render() {
     const navProps = this.props.navigation.state.params.student;
-    console.log(navProps.first_name);
-    if (navProps.newStudent) {
+    if (this.props.navigation.state.params.newStudent) {
       return (
         <CreateStudentForm
           onSaveStudent={this._handleCreateStudent} />

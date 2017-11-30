@@ -36,10 +36,14 @@ class StudentProfileScreen extends React.Component {
 
   _deleteStudent(studentId) {
     const successFunc = (responseData) => {
+      console.log("starting delete");
       this.props.navigation.state.params.refreshStudents();
       this.props.navigation.goBack(null);
-    }
-    deleteRequest(APIRoutes.getStudentPath(studentId), successFunc, standardError);
+    };
+    const errorFunc = (error) => {
+      console.error(error);
+    };
+    deleteRequest(APIRoutes.getStudentPath(studentId), successFunc, errorFunc);
   }
 
   _renderStudent() {

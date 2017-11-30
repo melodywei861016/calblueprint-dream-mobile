@@ -37,7 +37,7 @@ class StudentsScreen extends React.Component {
   _fetchStudent(studentId) {
     const { navigate } = this.props.navigation;
     const successFunc = (responseData) => {
-      this.setState({ students: responseData, isLoading: false });
+      this.setState({ student: responseData, isLoading: false });
     }
     const errorFunc = (error) => {
       // TODO: Display correct toastr error msg
@@ -77,7 +77,7 @@ class StudentsScreen extends React.Component {
         <Button
           onPress={() => navigate('CreateStudent', {refreshStudents: this._fetchStudents,
                                                     courseId: this.state.courseId,
-                                                    teacherId: 1})}
+                                                    newStudent: true})}
           title="Create Student"
         />
         { students }

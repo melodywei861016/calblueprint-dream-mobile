@@ -216,6 +216,7 @@ class EditCourseForm extends React.Component {
   _handleSaveCourse() {
     this._clearFormErrors();
     const values = this.form.getValue();
+    console.log(this.form.getValue());
     if (values) {
       this.props.onSaveCourse({ course: values, sessions: this.state.sessionList })
     } else {

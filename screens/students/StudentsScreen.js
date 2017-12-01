@@ -19,7 +19,7 @@ class StudentsScreen extends React.Component {
     this._renderStudents = this._renderStudents.bind(this);
     this._fetchStudent = this._fetchStudent.bind(this);
     this._refreshStudents = this._refreshStudents.bind(this);
-    this.navigateToStudentProfile = this.navigateToStudentProfile.bind(this);
+    // this.navigateToStudentProfile = this.navigateToStudentProfile.bind(this);
   }
 
   componentDidMount() {
@@ -49,39 +49,44 @@ class StudentsScreen extends React.Component {
     getRequest(APIRoutes.getStudentPath(studentId), successFunc, errorFunc);
   }
 
-  _refreshStudents() {
-    console.log("calling ref");
-    const { navigate } = this.props.navigation;
-    const successFunc = (responseData) => {
-      this.setState({ students: responseData, isLoading: false });
-    };
-    const errorFunc = (error) => {
-      console.error(error);
-    };
-    getRequest(APIRoutes.getStudentsPath(this.state.courseId), successFunc, errorFunc);
+  /**
+   * Delete the student at index i in this.state.students
+   * and refreshes the students state.
+   */
+  _refreshStudents(i) {
+    return () => {
+      // put ur shit here
+
+      // delete i-th student from this.state.students
+      this.state.students.splice(i, 1); // <- not complete sure
+      this.setState({ students: this.state.students });
+    }
+    // const { navigate } = this.props.navigation;
+    // const successFunc = (responseData) => {
+    //   this.setState({ students: responseData, isLoading: false });
+    // };
+    // const errorFunc = (error) => {
+    //   console.error(error);
+    // };
+    // getRequest(APIRoutes.getStudentsPath(this.state.courseId), successFunc, errorFunc);
   }
 
-  // navigateToStudentProfile() {
-  //   this.props.navigation.navigate('StudentProfile', {
-  //     refreshStudents: this._refreshStudents,
-  //     studentId: student.id,
-  //   });
-  // }
-
-  navigateToStudentProfile = () => {
-    this.props.navigation.navigate('StudentProfile', {
-      refreshStudents: this._refreshStudents,
-      studentId: student.id,
-    });
+  navigateToStudentProfile(student, i) {
+    return () => {
+      this.props.navigation.navigate('StudentProfile', {
+        refreshStudents: this._refreshStudents(i),
+        studentId: student.id,
+      });
+    };
   }
 
   _renderStudents() {
     const { navigate } = this.props.navigation;
-    return this.state.students.map(function(student, i) {
+    return this.state.students.map((student, i) => {
       return(
         <View key={i}>
             <Button
-            onPress={this.navigateToStudentProfile}
+            onPress={this.navigateToStudentProfile(student, i)}
             title={student.first_name + " " + student.last_name}
             />
         </View>

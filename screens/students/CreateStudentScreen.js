@@ -1,12 +1,9 @@
 import React from 'react';
-import { Button, Text, View } from 'react-native';
-import { Form, InputField, PickerField,
-         DatePickerField, TimePickerField } from 'react-native-form-generator';
 import { APIRoutes } from '../../config/routes';
+import { postRequest, putRequest } from '../../lib/requests';
+import { standardError } from '../../lib/alerts';
 import PropTypes from 'prop-types';
 import CreateStudentForm from '../../components/Form/CreateStudentForm'
-import { getRequest, postRequest, putRequest } from '../../lib/requests';
-import { standardError } from '../../lib/alerts';
 
 class CreateStudentScreen extends React.Component {
   constructor(props) {
@@ -14,9 +11,7 @@ class CreateStudentScreen extends React.Component {
     this._handleCreateStudent = this._handleCreateStudent.bind(this);
     this._handleUpdateStudent = this._handleUpdateStudent.bind(this);
     this.state = {
-      student: {},
       courseId: this.props.navigation.state.params.courseId,
-      teacherId: this.props.navigation.state.params.teacherId,
     }
   }
 
@@ -36,6 +31,7 @@ class CreateStudentScreen extends React.Component {
   // }
 
   _handleCreateStudent(params) {
+    params.student.course_id = this.state.courseId;
       const successFunc = (responseData) => {
         this.setState({ student: responseData});
         this.props.navigation.state.params.refreshStudents();
@@ -46,7 +42,6 @@ class CreateStudentScreen extends React.Component {
 
   _handleUpdateStudent(params) {
     const successFunc = (responseData) => {
-      this.setState({ student: responseData});
       this.props.navigation.state.params.refreshStudents();
       this.props.navigation.goBack(null);
     }
@@ -78,7 +73,7 @@ class CreateStudentScreen extends React.Component {
             onSaveStudent={this._handleUpdateStudent} />
          </View>
       )
-  }
+    }
   }
 }
 

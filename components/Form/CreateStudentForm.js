@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Text, View } from 'react-native';
+import { Button, Text, ScrollView } from 'react-native';
 import { Form, InputField, PickerField,
          DatePickerField, TimePickerField } from 'react-native-form-generator';
 import { APIRoutes } from '../../config/routes';
@@ -55,7 +55,7 @@ class CreateStudentForm extends React.Component {
 
   render() {
     return (
-      <View>
+      <ScrollView>
         <Form
           onChange={this._handleFormChange.bind(this)}
           value={this.state.formValues}
@@ -167,7 +167,7 @@ class CreateStudentForm extends React.Component {
           onPress={this._handleSaveStudent}
           title='Save'
         />
-      </View>
+      </ScrollView>
     );
 
   }
